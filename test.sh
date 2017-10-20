@@ -1,6 +1,7 @@
 #!/bin/bash
 
 errors=0
+test_data=$(readlink -f "$(dirname $0)/test_data")
 exe="$1"
 
 # Allow output message to contain "Usage" or "Synopsis" in any case
@@ -11,29 +12,29 @@ exe="$1"
 }
 
 
-res1='test_data/one_sequence.fasta	1	237	237	237	237'
-$exe test_data/one_sequence.fasta | grep -q "$res1" || {
-    echo "Test Failed: $exe test_data/one_sequence.fasta. Expected '$res1'"
+res1="$test_data/one_sequence.fasta	1	237	237	237	237"
+$exe $test_data/one_sequence.fasta | grep -q "$res1" || {
+    echo "Test Failed: $exe $test_data/one_sequence.fasta. Expected '$res1'"
     let errors+=1
 }
 
-res2='test_data/two_sequence.fasta	2	357	120	178	237'
-$exe test_data/two_sequence.fasta | grep -q "$res2" || {
-    echo "Test Failed: $exe test_data/two_sequence.fasta. Expected '$res2'"
+res2="$test_data/two_sequence.fasta	2	357	120	178	237"
+$exe $test_data/two_sequence.fasta | grep -q "$res2" || {
+    echo "Test Failed: $exe $test_data/two_sequence.fasta. Expected '$res2'"
     let errors+=1
 }
 
 # Test filtering
-res3='test_data/two_sequence.fasta	1	237	237	237	237'
-$exe --minlen 200 test_data/two_sequence.fasta | grep -q "$res3" || {
-    echo "Test Failed: $exe --minlen 200 test_data/two_sequence.fasta. Expected '$res3'"
+res3="$test_data/two_sequence.fasta	1	237	237	237	237"
+$exe --minlen 200 $test_data/two_sequence.fasta | grep -q "$res3" || {
+    echo "Test Failed: $exe --minlen 200 $test_data/two_sequence.fasta. Expected '$res3'"
     let errors+=1
 }
 
 # Test reading stdin
-res4='	1	237	237	237	237'
-$exe --minlen 200 < test_data/two_sequence.fasta | grep -q "$res4" || {
-    echo "Test Failed: $exe --minlen 200 < test_data/two_sequence.fasta. Expected '$res4'"
+res4="	1	237	237	237	237"
+$exe --minlen 200 < $test_data/two_sequence.fasta | grep -q "$res4" || {
+    echo "Test Failed: $exe --minlen 200 < $test_data/two_sequence.fasta. Expected '$res4'"
     let errors+=1
 }
 
@@ -55,14 +56,14 @@ ex=$?
 }
 
 # Test empty file
-res='test_data/empty_file	0	0	-	-	-'
-$exe test_data/empty_file | grep -q "$res" || {
-    echo "Test Failed: $exe test_data/empty. Expected '$res'"
+res="$test_data/empty_file	0	0	-	-	-"
+$exe $test_data/empty_file | grep -q "$res" || {
+    echo "Test Failed: $exe $test_data/empty. Expected '$res'"
     let errors+=1
 }
 
 # Test when --minlen filters out ALL sequences (empty result)
-fasta='test_data/two_sequence.fasta'
+fasta="$test_data/two_sequence.fasta"
 res="$fasta	0	0	-	-	-"
 $exe --minlen 1000 "$fasta" | grep -q "$res" || {
     echo "Test Failed: $exe --minlen 1000 $fasta. Expected '$res'"
