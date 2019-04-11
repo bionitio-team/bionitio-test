@@ -96,7 +96,7 @@ function test_stdout_exit {
     expected_output_file=$2
     expected_exit_status=$3
     verbose_message "Testing stdout and exit status: $1"
-    difference=$(diff <(echo "$output") $expected_output_file)
+    difference=$(diff -N <(echo "$output") $expected_output_file)
     if [ -n "$difference" ]; then 
         let num_errors+=1
         echo "Test output failed: $1"
