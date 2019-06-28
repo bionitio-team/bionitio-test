@@ -139,7 +139,7 @@ function test_exit_status {
 
 
 # 1. Parse command line arguments.
-parse_args $@
+parse_args "$@"
 # 2. Change to test directory
 cd $test_data_dir
 # 2. Run tests
